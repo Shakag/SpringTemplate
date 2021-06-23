@@ -8,9 +8,11 @@ import com.shakag.common.Result;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
@@ -21,7 +23,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         DecodedJWT decodedJWT = JWT.decode(token);
 
         response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
+        ServletOutputStream os = response.getOutputStream();
 
         //验证jwt
         try {
@@ -30,17 +32,17 @@ public class TokenInterceptor implements HandlerInterceptor {
             //判断token是否过期
             if(time < System.currentTimeMillis()){
                 Result result = new Result(400, "token expired", null);
-                pw.write(JSON.toJSONString(result));
+                os.write(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
                 return false;
             }
         }catch (Exception e){
             //进入异常, token 被篡改, 返回json信息给前端
             Result result = new Result(400, "token invalid", null);
-            pw.write(JSON.toJSONString(result));
+            os.write(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
             return false;
         }finally {
-            pw.flush();
-            pw.close();
+            os.flush();
+            os.close();
         }
 
         return true;
