@@ -48,8 +48,8 @@ public class CodeGenerator {
         //setInclude("sys_user","sys_role");
         //数据库表映射到实体的命名策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
-        //数据库表字段映射到实体的命名策略, 未指定按照 naming 执行, NamingStrategy.underline_to_camel
-        strategy.setColumnNaming(NamingStrategy.no_change);
+        //数据库表字段映射到实体的命名策略, 未指定按照 naming 执行, NamingStrategy.no_change
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true); //自动lombook
         mpg.setStrategy(strategy);
 
