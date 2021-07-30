@@ -1,6 +1,7 @@
 package com.shakag.controller;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.shakag.common.validate.GroupAdd;
 import com.shakag.common.validate.ValidList;
 import com.shakag.entity.SysUser;
@@ -32,6 +33,7 @@ public class SysUserController {
     @PostMapping("/add")
     public String add(@Validated(GroupAdd.class) @RequestBody ValidList<SysUser> user){
         System.out.println(user);
+
         return "add success";
     }
 }
