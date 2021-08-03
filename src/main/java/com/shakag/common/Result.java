@@ -19,7 +19,7 @@ public class Result implements Serializable {
     public static final String DEFAULT_ERROR_MESSAGE = "网络异常";
     public static final Integer DEFAULT_SUCCESS_CODE = 200;
     public static final Integer DEFAULT_ERROR_CODE = 500;
-    
+
     private int code;
     private String msg;
     private Object data;
@@ -31,6 +31,7 @@ public class Result implements Serializable {
     public static Result success(Object data){
         return new Result(DEFAULT_SUCCESS_CODE,DEFAULT_SUCCESS_MESSAGE,data);
     }
+
     public static Result success(String msg,Object data){
         return new Result(DEFAULT_SUCCESS_CODE,msg,data);
     }
