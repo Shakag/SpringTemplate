@@ -1,6 +1,8 @@
 package com.shakag.controller;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
+import com.shakag.common.Result;
 import com.shakag.common.validate.GroupAdd;
 import com.shakag.common.validate.ValidList;
 import com.shakag.entity.SysUser;
@@ -30,9 +32,9 @@ public class SysUserController {
      *  ValidList<E>就是封装list后的JavaBean
      */
     @PostMapping("/add")
-    public String add(@Validated(GroupAdd.class) @RequestBody ValidList<SysUser> user){
+    public Result add(@Validated(GroupAdd.class) @RequestBody ValidList<SysUser> user){
         System.out.println(user);
-        return "add success";
+        return Result.success();
     }
 }
 
