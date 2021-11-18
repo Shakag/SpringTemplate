@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Result implements Serializable {
+public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public class Result implements Serializable {
 
     private int code;
     private String msg;
-    private Object data;
+    private T data;
 
     public static Result success(){
         return new Result(DEFAULT_SUCCESS_CODE,DEFAULT_SUCCESS_MESSAGE,null);

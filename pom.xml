@@ -96,11 +96,18 @@
         </dependency>
         
         <!--Swagger2和Swagger-ui-->
+<!--        <dependency>-->
+<!--			<groupId>io.springfox</groupId>-->
+<!--			<artifactId>springfox-boot-starter</artifactId>-->
+<!--			<version>3.0.0</version>-->
+<!--		</dependency>-->
+
+        <!--Knife4j(Swagger增强插件）本身已经引入了springfox，否则会导致版本冲突，包含Swagger2和Swagger-ui-->
         <dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>3.0.0</version>
-		</dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
 		
     </dependencies>
 
