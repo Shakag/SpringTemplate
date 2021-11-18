@@ -94,6 +94,14 @@
             <artifactId>easyexcel</artifactId>
             <version>2.2.10</version>
         </dependency>
+        
+        <!--Swagger2和Swagger-ui-->
+        <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
     </dependencies>
 
 

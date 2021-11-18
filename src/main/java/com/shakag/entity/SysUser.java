@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import com.shakag.common.validate.GroupAdd;
 import com.shakag.common.validate.GroupUpdate;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +33,7 @@ public class SysUser implements Serializable {
 
     @Size(max = 8,message = "名称长度不能超过8", groups = {GroupAdd.class, GroupUpdate.class})
     @NotBlank(message = "名称不能为空", groups = {GroupAdd.class, GroupUpdate.class})
+    @ApiModelProperty("姓名") //swagger2 字段信息
     private String username;
 
     private String password;
