@@ -21,6 +21,7 @@ public class CodeGenerator {
         gc.setOpen(false); //生成完是否打开文件夹
         gc.setFileOverride(false);//是否覆盖
         gc.setServiceName("%sService");//去Service 的 I 前缀
+        gc.setSwagger2(true); //开启 swagger 模式
         mpg.setGlobalConfig(gc);
 
         //设置数据源
@@ -45,7 +46,7 @@ public class CodeGenerator {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         //设置要映射的表名,如果不设置就是生成所有的表; 多个用逗号 , 隔开
-        //setInclude("sys_user","sys_role");
+        //strategy.setInclude("sys_user","sys_role");
         //数据库表映射到实体的命名策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         //数据库表字段映射到实体的命名策略, 未指定按照 naming 执行, NamingStrategy.no_change
