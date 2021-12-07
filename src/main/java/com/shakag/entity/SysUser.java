@@ -38,6 +38,9 @@ public class SysUser implements Serializable {
 
     private String password;
 
+    @ApiModelProperty("角色权限")
+    private String role;
+
     private String avatar;
 
     private String email;

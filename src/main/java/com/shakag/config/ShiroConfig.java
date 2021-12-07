@@ -36,10 +36,14 @@ public class ShiroConfig {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         map.put("/index","authc");
         map.put("/add","authc");
+        //必须拥有user角色加add权限才能访问
+        map.put("/test","perms[user:add]");
         shiroBean.setFilterChainDefinitionMap(map);
 
         //设置登录的请求(没有权限的页面会跳转到此页面)
         shiroBean.setLoginUrl("/login");
+        //未授权页面
+        shiroBean.setUnauthorizedUrl("/unAuth");
 
         return shiroBean;
     }
