@@ -187,7 +187,7 @@
                         <imageTag>latest</imageTag>
                     </imageTags>
                     <!--指定基础镜像jdk1.8-->
-                    <baseImage>java:8</baseImage>
+                    <baseImage>java</baseImage>
                     <!--
                     镜像制作人本人信息-->
                     <maintainer>shakag</maintainer>
@@ -196,7 +196,7 @@
                     <!--查看我们的java版本-->
                     <cmd>["java", "-version"]</cmd>
                     <!--${project.build.finalName}.jar是打包后生成的jar包的名字-->
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <entryPoint>["java", "-jar", "${project.build.finalName}.jar"]</entryPoint>
                     <!--指定远程 docker api地址-->
                     <dockerHost>http://localhost:2375</dockerHost>
                     <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
