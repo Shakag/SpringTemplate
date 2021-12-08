@@ -198,7 +198,7 @@
                     <!--${project.build.finalName}.jar是打包后生成的jar包的名字-->
                     <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
                     <!--指定远程 docker api地址-->
-                    <dockerHost>http://47.111.230.38:2375</dockerHost>
+                    <dockerHost>http://localhost:2375</dockerHost>
                     <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
                     <resources>
                         <resource>
