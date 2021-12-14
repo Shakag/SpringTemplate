@@ -98,13 +98,13 @@
             <artifactId>easyexcel</artifactId>
             <version>2.2.10</version>
         </dependency>
-        
+
         <!--Swagger2和Swagger-ui-->
-<!--        <dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-boot-starter</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
+        <!--        <dependency>-->
+        <!--			<groupId>io.springfox</groupId>-->
+        <!--			<artifactId>springfox-boot-starter</artifactId>-->
+        <!--			<version>3.0.0</version>-->
+        <!--		</dependency>-->
 
         <!--Knife4j(Swagger增强插件）本身已经引入了springfox，否则会导致版本冲突，包含Swagger2和Swagger-ui-->
         <dependency>
@@ -213,5 +213,15 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <!--  让SpringBoot打包java路径下的xml类型的文件  -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

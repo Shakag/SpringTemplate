@@ -10,10 +10,23 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+  jackson:
+    # 格式化后台返前台时 的 日期格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT%2B8
 
 logging:
   level:
     root: INFO
+
+mybatis:
+  configuration:
+    # 控制台输出日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰，开启后，只要数据库字段和对象属性名字母相同，无论中间加多少下划线都可以识别
+    map-underscore-to-camel-case: true
+  # mapper.xml 不在 resourece 目录下时，需要配置路径
+  mapper-locations: classpath:com/shakag/mapper/xml/*.xml
 
 mybatis-plus:
   configuration:
