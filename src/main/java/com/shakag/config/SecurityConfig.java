@@ -1,6 +1,7 @@
 package com.shakag.config;
 
 import com.shakag.filter.CaptchaFilter;
+import com.shakag.impl_extend.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import javax.annotation.Resource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final CaptchaFilter captchaFilter;
 
     /**
@@ -32,22 +34,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //指定要使用的自定义登录实现类
+        auth.userDetailsService(userDetailsServiceImpl);
 
-        // 在内存中配置了一个用户
-        auth.inMemoryAuthentication()
-                // 指定加密方式
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("root")
-                // Spring5 开始，强制要求密码要加密
-                .password(new BCryptPasswordEncoder().encode("3333"))
-                // 权限跟角色都给时，权限会失效
-                .roles("admin")
-                .authorities("sys:add", "sys:update", "sys:delete", "sys:select");
+//        // 在内存中配置了一个用户
+//        auth.inMemoryAuthentication()
+//                // 指定加密方式
+//                .passwordEncoder(new BCryptPasswordEncoder())
+//                .withUser("root")
+//                // Spring5 开始，强制要求密码要加密
+//                .password(new BCryptPasswordEncoder().encode("3333"))
+//                // 权限跟角色都给时，权限会失效
+//                .roles("admin")
+//                .authorities("sys:add", "sys:update", "sys:delete", "sys:select");
     }
 
     /**
      * 对角色的权限——所能访问的路径做出限制
-     * @param http  http 的设置有顺序的要求
+     *
+     * @param http http 的设置有顺序的要求
      * @throws Exception 异常
      */
     @Override
@@ -68,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 登录成功时执行此方法
+     *
      * @return void
      */
     @Bean
@@ -79,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 登录失败时执行此方法
+     *
      * @return void
      */
     @Bean
