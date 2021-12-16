@@ -7,6 +7,14 @@ spring:
     password: 3333
     url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # 默认数据库连接池 配置
+#    hikari:
+#      # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 默认:30秒
+#      connection-timeout: 30000
+#      # 最小连接数
+#      minimum-idle: 5
+#      # 最大连接数
+#      maximum-pool-size: 15
   redis:
     host: 127.0.0.1
     port: 6379
@@ -14,6 +22,7 @@ spring:
     # 格式化后台返前台时 的 日期格式
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT%2B8
+
 
 logging:
   level:
