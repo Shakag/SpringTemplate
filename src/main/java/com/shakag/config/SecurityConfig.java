@@ -1,11 +1,14 @@
 package com.shakag.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shakag.common.Result;
 import com.shakag.filter.CaptchaFilter;
 import com.shakag.impl_extend.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,6 +18,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @Import(BCryptPasswordEncoder.class)
@@ -60,14 +66,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //登录之前先确认验证码
         http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
 
+        //开启登录页面，关闭后不再跳转自带的 login页面
         http.formLogin()
                 .successHandler(successHandler())
                 .failureHandler(failureHandler());
 
+
+        //配置自定义403权限不足异常处理器
+        http.exceptionHandling().accessDeniedHandler((HttpServletRequest request, HttpServletResponse response, AccessDeniedException e)->{
+            response.setContentType("application/json;charset=utf-8");
+            ServletOutputStream os = response.getOutputStream();
+            os.write(new ObjectMapper().writeValueAsBytes(Result.fail(403,"auth invalid")));
+            os.flush();
+            os.close();
+        });
+
+        //未登录时返回提示
+        http.httpBasic().authenticationEntryPoint((request,response,authenticationException)->{
+            response.setContentType("application/json;charset=utf-8");
+            ServletOutputStream os = response.getOutputStream();
+            os.write(new ObjectMapper().writeValueAsBytes(Result.fail(401,"not login")));
+            os.flush();
+            os.close();
+        });
+
+        //设置用户登录 session 过期跳转的接口
+        http.sessionManagement()
+                .invalidSessionUrl("/session/invalid");
+
+        //放行特定的接口
+        http.authorizeRequests()
+//                .antMatchers("/*").hasRole("user")
+                .antMatchers("/session/invalid").permitAll();
+
+
         //所有请求均拦截
         http.authorizeRequests().anyRequest().authenticated();
 
-        //关闭csrf防护
+        //关闭csrf防护，开启模拟请求
         http.csrf().disable();
     }
 
