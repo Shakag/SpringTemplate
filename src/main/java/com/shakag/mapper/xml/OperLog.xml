@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shakag.mapper.OperLogMapper">
+
+    <insert id="save">
+        insert into sys_oper_log(oper_module, oper_method, oper_type, oper_desc, req_method, oper_param, oper_ip,
+                                 oper_uri, oper_user, create_time)
+        values (#{operModule}, #{operMethod}, #{operType}, #{operDesc}, #{reqMethod}, #{operParam}, #{operIp},
+                #{operUri}, #{operUser}, #{createTime})
+    </insert>
+
+<!--    <select id="save">-->
+<!--        select * from sys_oper_log-->
+<!--    </select>-->
+</mapper>
