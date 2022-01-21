@@ -17,14 +17,16 @@ import java.util.List;
 public class FileLoadController {
 
     @PostMapping("/upload/file")
-    public Result upload(@RequestParam("upload_file") MultipartFile upload_file){
-        if(upload_file.isEmpty()){
+    public Result upload(@RequestParam("upload_file") MultipartFile multipartFile){
+//        byte[] bytes = multipartFile.getBytes();
+        if(multipartFile.isEmpty()){
             return Result.fail("上传失败");
         }
-        String filename = upload_file.getOriginalFilename();
+        String filename = multipartFile.getOriginalFilename();
         File file = new File("C:\\Users\\Administrator\\Desktop\\" + filename);
         try {
-            upload_file.transferTo(file);
+            //将获取到的文件 存储在指定目录
+            multipartFile.transferTo(file);
             return Result.success("上传成功");
         } catch (IOException e) {
             e.printStackTrace();
