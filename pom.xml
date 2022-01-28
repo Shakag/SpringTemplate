@@ -97,11 +97,18 @@
             <version>2.0.1.Final</version>
         </dependency>
 
-        <!--Excel操作-->
+        <!--EasyExcel 会引入 poi-ooxml-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>easyexcel</artifactId>-->
+<!--            <version>2.2.10</version>-->
+<!--        </dependency>-->
+
+        <!-- xlsx(07版本)  Office Open XML 微软公司为Office 2007产品开发的技术规范-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
-            <version>2.2.10</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
         </dependency>
 
         <!--Swagger2和Swagger-ui-->
