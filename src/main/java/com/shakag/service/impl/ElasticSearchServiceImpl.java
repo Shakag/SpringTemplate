@@ -17,8 +17,13 @@ import java.util.HashMap;
 @Service
 @AllArgsConstructor
 public class ElasticSearchServiceImpl implements ElasticSearchService {
-    private final RestHighLevelClient client;
+    private final RestHighLevelClient restHighLevelClient;
+    private final RestClient restClient;
 
+    /**
+     * 通过restClient分词
+     * @throws Exception IO
+     */
     @Override
     public void ikParticiple() throws Exception{
         //创建分词请求
@@ -33,8 +38,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         request.setJsonEntity(value);
 
         //发送请求
-        RestClient lowLevelClient = client.getLowLevelClient();
-        Response response = lowLevelClient.performRequest(request);
+        Response response = restClient.performRequest(request);
 
         //获取返回对象中的http实体
         HttpEntity entity = response.getEntity();
