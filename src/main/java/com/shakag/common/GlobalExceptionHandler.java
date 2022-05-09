@@ -14,33 +14,24 @@ import java.io.IOException;
  * 全局异常处理
  */
 @ControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result error(Exception e){
+    public Result<String> error(Exception e){
         e.printStackTrace();
-        return new Result(400,"Global Exception",null);
+        return Result.fail(400,"Global Exception");
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
-    public Result error(IOException e){
+    public Result<String>  error(IOException e){
         e.printStackTrace();
-        return new Result(400,"IOException",null);
-    }
-
-    /**
-     * 空指针异常
-     */
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseBody
-    public String error(NullPointerException e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
-        String exceptionMsg = "空指针异常:" + stackTrace[0].getClassName() + ", methodName " + stackTrace[0].getMethodName() + ", lineNumber " + stackTrace[0].getLineNumber();
-        log.info("log.info- exceptionMsg = {}", exceptionMsg);
-        return exceptionMsg;
+        String className = stackTrace[0].getClassName(); //首次发生异常的java class类名称
+        String methodName = stackTrace[0].getMethodName(); //首次发生异常的方法名称
+        int lineNumber = stackTrace[0].getLineNumber(); //发生异常的行数
+        return Result.fail(400,"IOException");
     }
 
     /**
@@ -49,7 +40,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Result error(MethodArgumentNotValidException e){
+    public Result<String>  error(MethodArgumentNotValidException e){
         e.printStackTrace();
         BindingResult bindingResult = e.getBindingResult();
         FieldError fieldError = bindingResult.getFieldError();
@@ -57,6 +48,6 @@ public class GlobalExceptionHandler {
         if (fieldError != null) {
             defaultMessage = fieldError.getDefaultMessage();
         }
-        return new Result(400,defaultMessage,null);
+        return Result.fail(400,defaultMessage);
     }
 }
