@@ -1,5 +1,6 @@
 package com.shakag.common;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import java.io.IOException;
  * 全局异常处理
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
@@ -27,6 +29,18 @@ public class GlobalExceptionHandler {
     public Result error(IOException e){
         e.printStackTrace();
         return new Result(400,"IOException",null);
+    }
+
+    /**
+     * 空指针异常
+     */
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseBody
+    public String error(NullPointerException e) {
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        String exceptionMsg = "空指针异常:" + stackTrace[0].getClassName() + ", methodName " + stackTrace[0].getMethodName() + ", lineNumber " + stackTrace[0].getLineNumber();
+        log.info("log.info- exceptionMsg = {}", exceptionMsg);
+        return exceptionMsg;
     }
 
     /**
