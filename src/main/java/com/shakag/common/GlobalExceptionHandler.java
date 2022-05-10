@@ -1,6 +1,5 @@
 package com.shakag.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,20 +17,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result<String> error(Exception e){
-        e.printStackTrace();
-        return Result.fail(400,"Global Exception");
+    public Result<String> error(Exception e) {
+        //e.printStackTrace(); 生产环境禁用
+        return Result.fail(400, "Global Exception");
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
-    public Result<String>  error(IOException e){
-        e.printStackTrace();
+    public Result<String> error(IOException e) {
+        //JDK1.8中,SQLException 和 IOException 的 e.getMessage()不为空。RuntimeException的getMessage()为空
+        String message = e.getMessage();
         StackTraceElement[] stackTrace = e.getStackTrace();
         String className = stackTrace[0].getClassName(); //首次发生异常的java class类名称
         String methodName = stackTrace[0].getMethodName(); //首次发生异常的方法名称
         int lineNumber = stackTrace[0].getLineNumber(); //发生异常的行数
-        return Result.fail(400,"IOException");
+        return Result.fail(400, "IOException");
     }
 
     /**
@@ -40,14 +40,13 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Result<String>  error(MethodArgumentNotValidException e){
-        e.printStackTrace();
+    public Result<String> error(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         FieldError fieldError = bindingResult.getFieldError();
         String defaultMessage = null;
         if (fieldError != null) {
             defaultMessage = fieldError.getDefaultMessage();
         }
-        return Result.fail(400,defaultMessage);
+        return Result.fail(400, defaultMessage);
     }
 }
