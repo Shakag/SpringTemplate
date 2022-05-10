@@ -8,19 +8,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * 全局异常处理
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public Result<String> error(Exception e) {
-        //e.printStackTrace(); 生产环境禁用
-        return Result.fail(400, "Global Exception");
-    }
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
@@ -33,6 +27,14 @@ public class GlobalExceptionHandler {
         int lineNumber = stackTrace[0].getLineNumber(); //发生异常的行数
         return Result.fail(400, "IOException");
     }
+
+    @ExceptionHandler(SQLException.class)
+    @ResponseBody
+    public Result<String> error(SQLException e) {
+        //e.printStackTrace(); 生产环境禁用
+        return Result.fail(400, e.getMessage());
+    }
+
 
     /**
      * 接收参数格式不正确异常
