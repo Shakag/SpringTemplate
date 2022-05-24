@@ -1,13 +1,9 @@
 package com.shakag.filter;
 
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.*;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * 修改或者添加参数
@@ -15,156 +11,47 @@ import java.util.Vector;
 
 public class HttpServletRequestWrapperExt extends HttpServletRequestWrapper {
 
-    /**
-     * 存储请求数据
-     */
-    private String bodyParams;
+    //请求头集合
+    private Map<String, String> headerMap = new HashMap<>();
 
-    private Map<String, String[]> params;
+    //参数集合
+    private Map<String, String[]> parameterMap = new HashMap<>();
 
-    public HttpServletRequestWrapperExt(HttpServletRequest request, Map<String, String[]> newParams) {
+
+
+    public HttpServletRequestWrapperExt(HttpServletRequest request) {
         super(request);
-        this.params = newParams;
-        renewParameterMap(request);
-        renewBody(request);
+        // 将 request 中的参数赋值给当前 map
+        parameterMap.putAll(request.getParameterMap());
     }
 
-    @Override
-    public String getParameter(String name) {
-        String result;
-        Object v = params.get(name);
-        if (v == null) {
-            result = null;
-        } else if (v instanceof String[]) {
-            String[] strArr = (String[]) v;
-            if (strArr.length > 0) {
-                result = strArr[0];
-            } else {
-                result = null;
-            }
-        } else if (v instanceof String) {
-            result = (String) v;
-        } else {
-            result = v.toString();
-        }
-        return result;
+    public Map<String, String> getHeaderMap() {
+        return headerMap;
+    }
+
+    public void setHeaderMap(Map<String, String> headerMap) {
+        this.headerMap = headerMap;
     }
 
     @Override
     public Map<String, String[]> getParameterMap() {
-        return params;
+        return parameterMap;
     }
 
-    @Override
-    public Enumeration<String> getParameterNames() {
-        return new Vector<String>(params.keySet()).elements();
+    public void setParameterMap(Map<String, String[]> parameterMap) {
+        this.parameterMap = parameterMap;
     }
 
+    /**
+     * controller不指定注解或注解为RequestParam时
+     * 会调用 RequestParamMethodArgumentResolver解析器 之后会调用此方法
+     */
     @Override
     public String[] getParameterValues(String name) {
-        String[] result;
-        Object v = params.get(name);
-        if (v == null) {
-            result = null;
-        } else if (v instanceof String[]) {
-            result = (String[]) v;
-        } else if (v instanceof String) {
-            result = new String[]{(String) v};
-        } else {
-            result = new String[]{v.toString()};
+        String[] valueArr = super.getParameterValues(name);
+        if (parameterMap.containsKey(name)) {
+            return parameterMap.get(name);
         }
-        return result;
+        return valueArr;
     }
-
-    /**
-     * 重写getInputStream方法
-     */
-    @Override
-    public ServletInputStream getInputStream() {
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bodyParams.getBytes());
-        ServletInputStream servletInputStream = new ServletInputStream() {
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setReadListener(ReadListener readListener) {
-            }
-
-            @Override
-            public int read() {
-                return byteArrayInputStream.read();
-            }
-        };
-        return servletInputStream;
-
-    }
-
-    /**
-     * 重写getReader方法
-     */
-    @Override
-    public BufferedReader getReader() {
-        return new BufferedReader(new InputStreamReader(this.getInputStream()));
-    }
-
-    /**
-     * 读取body的值
-     */
-    private void renewBody(HttpServletRequest request) {
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-        bodyParams = stringBuilder.toString();
-    }
-
-    /**
-     * 取出参数放在全局变量
-     */
-    private void renewParameterMap(HttpServletRequest req) {
-        String queryString = req.getQueryString();
-        if (queryString != null && queryString.trim().length() > 0) {
-            String[] params = queryString.split("&");
-            for (int i = 0; i < params.length; i++) {
-                int splitIndex = params[i].indexOf("=");
-                if (splitIndex == -1) {
-                    continue;
-                }
-                String key = params[i].substring(0, splitIndex);
-                if (!this.params.containsKey(key)) {
-                    if (splitIndex < params[i].length()) {
-                        String value = params[i].substring(splitIndex + 1);
-                        this.params.put(key, new String[]{value});
-                    }
-                }
-            }
-        }
-    }
-
 }
