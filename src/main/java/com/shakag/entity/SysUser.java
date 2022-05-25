@@ -9,12 +9,13 @@ import com.shakag.common.validate.GroupUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Shakag
@@ -28,9 +29,9 @@ public class SysUser implements Serializable {
 
     private Long id;
 
-    @Size(max = 8,message = "名称长度不能超过8", groups = {GroupAdd.class, GroupUpdate.class})
+    @Size(max = 8, message = "名称长度不能超过8", groups = {GroupAdd.class, GroupUpdate.class})
     @NotBlank(message = "名称不能为空", groups = {GroupAdd.class, GroupUpdate.class})
-    @ApiModelProperty("姓名") //swagger2 字段信息
+    @ApiModelProperty(value = "姓名", required = true) //swagger2 字段信息
     private String username;
 
     //序列化属性为另外一个名称，如把password属性序列化为pwd
