@@ -45,14 +45,14 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public String error(MethodArgumentNotValidException e) {
+    public Result<String> error(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         FieldError fieldError = bindingResult.getFieldError();
         String defaultMessage = null;
         if (fieldError != null) {
             defaultMessage = fieldError.getDefaultMessage();
         }
-        return defaultMessage;
+        return Result.fail(400,defaultMessage);
     }
 
     /**
@@ -60,14 +60,14 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public String error(BindException e) {
+    public Result<String> error(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
         FieldError fieldError = bindingResult.getFieldError();
         String defaultMessage = null;
         if (fieldError != null) {
             defaultMessage = fieldError.getDefaultMessage();
         }
-        return defaultMessage;
+        return Result.fail(400,defaultMessage);
     }
 
     /**
@@ -75,7 +75,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
-    public String error(ConstraintViolationException e) {
-        return e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("; "));
+    public Result<String> error(ConstraintViolationException e) {
+        String msg =  e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("; "));
+        return Result.fail(400,msg);
     }
 }
